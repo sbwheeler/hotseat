@@ -8,13 +8,14 @@ import {fetchQuestions} from '../reducers/questions'
 /*---------------DUMB PRESENTATIONAL COMPONENT-----------------*/
 
 const DumbQuestions = ({ selectedQuestion, chooseQuestion }) => (
-	<div>
+	<div className="piece-container">
 		<RaisedButton
+			fullWidth={true}
 			onTouchTap={chooseQuestion}
 			secondary={true}>
 			Random Question!
 		</RaisedButton>
-		<h3>{selectedQuestion}</h3>
+		<h3 className="center p1">{selectedQuestion}</h3>
 	</div>
 )
 

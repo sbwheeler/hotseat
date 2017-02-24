@@ -24,3 +24,9 @@ h1 {
   margin: auto;
   border-radius: 50%;
 }
+
+.piece-container {
+  width: 80%;
+  margin: 0 auto;
+  margin-top: 5vh;
+}
