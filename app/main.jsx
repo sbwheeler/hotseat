@@ -6,6 +6,7 @@ import {connect, Provider} from 'react-redux'
 
 import store from './store'
 
+import Home from './components/Home'
 import Timer from './components/Timer'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import injectTapEventPlugin from 'react-tap-event-plugin'
@@ -36,6 +37,7 @@ render (
       <Route path="/" component={AppContainer} onEnter={onAppEnter}>
         <IndexRedirect to="/timer" />
         <Route path="/timer" component={Timer} />
+        <Route path="/home" component={Home} />
       </Route>
     </Router>
   </Provider>,
