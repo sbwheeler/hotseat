@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import anime from 'animejs';
 
 anime({
-  targets: 'div',
+  targets: '.anime',
   translateX: '13.5rem',
   scale: [.75, .9],
   delay: function(el, index) {
@@ -19,9 +19,9 @@ const DumbHome = () => (
     <div>
         <section>
           <article>
-            <div className="green"><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1137/anime-logo.png"></img></div>
-            <div className="blue"></div>
-            <div className="red"></div>
+            <div className="anime green"><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1137/anime-logo.png"></img></div>
+            <div className="anime blue"></div>
+            <div className="anime red"></div>
           </article>
           <h1>HOT SEAT</h1>
         </section>
