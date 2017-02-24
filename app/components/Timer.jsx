@@ -13,7 +13,7 @@ const QUESTIONS_DEFAULT = 6;
 /*---------------DUMB PRESENTATIONAL COMPONENT-----------------*/
 
 
-const DumbTimer = ({ handleMonologueChange, handleQTimeChange, monologue, questions, displayMinSec, timerStatus, handleStart }) => (
+const DumbTimer = ({ handleMonologueChange, handleQTimeChange, monologue, questions, displayMinSec, timerStatus, handleStart, paused }) => (
 	<div className="clearfix">
 		<div className="col-12 mx-auto">
 			<h1 className="center">Welcome to Hotseat!</h1>
@@ -21,10 +21,10 @@ const DumbTimer = ({ handleMonologueChange, handleQTimeChange, monologue, questi
 				<h3>Monologue time</h3>
 				<h3>{displayMinSec(monologue)}</h3>
 				<Slider
-					disabled={!!timerStatus}
+					disabled={!paused}
 					style={{ width: '80%'}}
 					defaultValue={MONO_DEFUALT}
-					min={1}
+					min={0}
 					max={6}
 					onChange={handleMonologueChange}
 				/>
@@ -34,7 +34,7 @@ const DumbTimer = ({ handleMonologueChange, handleQTimeChange, monologue, questi
 				<h3>Questions time</h3>
 				<h3>{displayMinSec(questions)}</h3>
 				<Slider
-					disabled={!!timerStatus}
+					disabled={!paused}
 					style={{ width: '80%'}}
 					defaultValue={QUESTIONS_DEFAULT}
 					min={2}
@@ -44,7 +44,7 @@ const DumbTimer = ({ handleMonologueChange, handleQTimeChange, monologue, questi
 			</div>
 		</div>
 
-			<RaisedButton primary={true} onTouchTap={handleStart}>{(!!timerStatus) ? 'Pause' : 'Start!'}</RaisedButton>
+			<RaisedButton primary={true} onTouchTap={handleStart}>{(!paused) ? 'Pause' : 'Start!'}</RaisedButton>
 
 		<UserContainer />
 	</div>
@@ -69,9 +69,6 @@ class Timer extends Component {
 		this.handleStart = this.handleStart.bind(this);
 
 		this.timer = this.timer.bind(this);
-
-		console.log(this.props)
-
 	}
 
 	handleMonologueChange(event, monologue) {
@@ -84,8 +81,8 @@ class Timer extends Component {
 
 	handleStart() {
 		if (!this.state.paused) {
-			// clearInterval(this.mIntervalId)
-			// clearInterval(this.qIntervalId)
+			clearInterval(this.mIntervalId)
+			clearInterval(this.qIntervalId)
 			this.setState({
 				paused: true
 			})
@@ -94,10 +91,9 @@ class Timer extends Component {
 			this.setState({
 				paused: false
 			})
-			console.log('starting from paused state')
-			this.props.startTimer('monologue')
-			this.timer('monologue')
-
+			if(this.state.monologue > 0) this.props.startTimer('monologue')
+			else this.props.startTimer('questions')
+			setTimeout(() => this.timer(this.props.timerStatus), 200)
 		}
 	}
 
@@ -108,7 +104,8 @@ class Timer extends Component {
 	// }
 
 	displayMinSec(time) {
-		const min = Math.floor(time);
+		if (time < 0) return '0:00'
+ 		const min = Math.floor(time);
 		let sec = ((time - min) * 60).toString().split('.')[0];
 		while (sec.length < 2) {
 			sec = '0' + sec;
@@ -117,27 +114,29 @@ class Timer extends Component {
 	}
 
 	timer(status) {
-
-		console.log('timer has been called with : ', status)
-
 		status === 'monologue' ?
-		this.mIntervalId = setInterval(this.tick(status), 1000) :
-		this.qIntervalId = setInterval(this.tick(status), 1000)
+		this.mIntervalId = setInterval(() => this.tick(status), 1000) :
+		this.qIntervalId = setInterval(() => this.tick(status), 1000)
 
 	}
 
 
 	tick(status){
-
-		console.log('ticking')
-
 		if (status === 'monologue'){
-			this.setState({
-				monologue: this.state.monologue - 0.01
-			})
+			if(this.state.monologue > 0) {
+				this.setState({
+					monologue: this.state.monologue - (1 / 60)
+				})
+			}
+			else {
+				this.props.startTimer('questions');
+				this.setState({
+					questions: this.state.questions - (1 / 60)
+				})
+			}
 		} else if (status === 'questions') {
 		  this.setState({
-				questions: this.state.questions - 0.01
+				questions: this.state.questions - (1 / 60)
 			})
 		}
 
@@ -154,6 +153,7 @@ class Timer extends Component {
 					questions={this.state.questions}
 					displayMinSec={this.displayMinSec}
 					timerStatus={this.props.timerStatus}
+					paused={this.state.paused}
 				/>
 				{/* this.props.timerStatus && <div>timer on!!!</div> */}
 				{/*<CircularProgressbar
@@ -162,8 +162,6 @@ class Timer extends Component {
 	          textForPercentage={this.showTime}
 	        >
          </CircularProgressbar>*/}
-
-        {console.log(this.state.monologue)}
 			</div>
 		)
 	}
