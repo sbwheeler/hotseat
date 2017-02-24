@@ -16,12 +16,12 @@ anime({
 
 
 const DumbHome = () => (
-    <div>
+    <div className="anime">
         <section>
           <article>
             <div className="anime green"><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1137/anime-logo.png"></img></div>
-            <div className="anime blue"></div>
-            <div className="anime red"></div>
+            <div className="blue"></div>
+            <div className="red"></div>
           </article>
           <h1>HOT SEAT</h1>
         </section>
