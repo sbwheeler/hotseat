@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {RaisedButton, Slider} from 'material-ui'
+import UserContainer from './users.jsx'
 
 /*---------------DUMB PRESENTATIONAL COMPONENT-----------------*/
 
@@ -20,6 +21,7 @@ const DumbTimer = () => (
 		</div>
 
 			<RaisedButton>Click me!</RaisedButton>
+	<UserContainer />
 	</div>
 )
 
