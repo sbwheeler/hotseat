@@ -13,17 +13,27 @@ import injectTapEventPlugin from 'react-tap-event-plugin'
 // needed for Material-UI
 injectTapEventPlugin();
 
+import {fetchUsers} from './reducers/users'
+
 const AppContainer = ({children}) => (
   <MuiThemeProvider>
     { children }
   </MuiThemeProvider>
 )
 
+const onAppEnter = () => {
+  return firebase.database().ref('/seed_fellows/').once('value')
+  .then(function(snapshot) {
+    console.log(snapshot.val());
+    store.dispatch(fetchUsers(snapshot.val()))
+  });
+}
+
 
 render (
   <Provider store={store}>
     <Router history={browserHistory}>
-      <Route path="/" component={AppContainer}>
+      <Route path="/" component={AppContainer} onEnter={onAppEnter}>
         <IndexRedirect to="/timer" />
         <Route path="/timer" component={Timer} />
       </Route>

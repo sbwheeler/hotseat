@@ -7,6 +7,21 @@
   </head>
   <body>
     <div id=main></div>
-    <script async defer src=/bundle.js></script>    
+    <script src="https://www.gstatic.com/firebasejs/3.6.10/firebase.js"></script>
+    <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyDZuA2afDRzTgkDU7PhMyMWw_Kx0Th767s",
+        authDomain: "hotseat-72e5c.firebaseapp.com",
+        databaseURL: "https://hotseat-72e5c.firebaseio.com",
+        storageBucket: "hotseat-72e5c.appspot.com",
+        messagingSenderId: "1049311068867"
+      };
+      firebase.initializeApp(config);
+    </script>
+
+    <script async defer src=/bundle.js></script>
+
   </body>
-</html> 
+
+</html>
