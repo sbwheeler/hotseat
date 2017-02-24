@@ -46,7 +46,6 @@ const DumbTimer = ({ handleMonologueChange, handleQTimeChange, monologue, questi
 
 			<RaisedButton primary={true} onTouchTap={handleStart}>{(!paused) ? 'Pause' : 'Start!'}</RaisedButton>
 
-		<UserContainer />
 	</div>
 )
 
