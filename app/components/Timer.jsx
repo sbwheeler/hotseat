@@ -3,7 +3,6 @@ import {RaisedButton, Slider} from 'material-ui'
 import { connect } from 'react-redux'
 import {setTimerStatus, reset} from '../reducers/timerStatus'
 import UserContainer from './users.jsx'
-import Airhorn from './Airhorn';
 
 /*---------------INITIAL STATE CONSTANTS-----------------*/
 const MONO_DEFUALT = 2;
@@ -46,8 +45,6 @@ const DumbTimer = ({ handleMonologueChange, handleQTimeChange, monologue, questi
 
 			<RaisedButton primary={true} onTouchTap={handleStart}>{(!!timerStatus) ? 'Pause' : 'Start!'}</RaisedButton>
 
-		<UserContainer />
-		<Airhorn />
 	</div>
 )
 

@@ -7,8 +7,7 @@ import {connect, Provider} from 'react-redux'
 import store from './store'
 
 import Home from './components/Home'
-import Timer from './components/Timer'
-import Airhorn from './components/Airhorn'
+import Main from './components/Main'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import injectTapEventPlugin from 'react-tap-event-plugin'
 
@@ -23,6 +22,8 @@ const AppContainer = ({children}) => (
   </MuiThemeProvider>
 )
 
+/*---------------ON ENTER HOOKS-----------------*/
+
 const onAppEnter = () => {
   return firebase.database().ref('/seed_fellows/').once('value')
   .then(function(snapshot) {
@@ -31,12 +32,14 @@ const onAppEnter = () => {
 }
 
 
+/*---------------REACT DOM RENDER-----------------*/
+
 render (
   <Provider store={store}>
     <Router history={browserHistory}>
       <Route path="/" component={AppContainer} onEnter={onAppEnter}>
-        <IndexRedirect to="/timer" />
-        <Route path="/timer" component={Timer} />
+        <IndexRedirect to="/hotseat" />
+        <Route path="/hotseat" component={Main} />
         <Route path="/home" component={Home} />
       </Route>
     </Router>
