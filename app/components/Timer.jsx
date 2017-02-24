@@ -15,7 +15,7 @@ const QUESTIONS_DEFAULT = 6;
 
 const DumbTimer = ({ handleMonologueChange, handleQTimeChange, monologue, questions, displayMinSec, timerStatus, handleStart, paused }) => (
 	<div className="clearfix">
-		<div className="col-12 mx-auto">
+		<div className="col-12 mx-auto px2">
 			<h1 className="center">Welcome to Hotseat!</h1>
 			<div className="col-6 inline-block">
 				<h3>Monologue time</h3>
@@ -43,8 +43,11 @@ const DumbTimer = ({ handleMonologueChange, handleQTimeChange, monologue, questi
 				/>
 			</div>
 		</div>
+		<div className="col-12 mx-auto piece-container">
+			<RaisedButton fullWidth={true} primary={true} onTouchTap={handleStart}>{(!paused) ? 'Pause' : 'Start!'}</RaisedButton>
+		</div>
 
-			<RaisedButton primary={true} onTouchTap={handleStart}>{(!paused) ? 'Pause' : 'Start!'}</RaisedButton>
+
 
 	</div>
 )
