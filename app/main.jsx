@@ -8,6 +8,7 @@ import store from './store'
 
 import Home from './components/Home'
 import Timer from './components/Timer'
+import Airhorn from './components/Airhorn'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import injectTapEventPlugin from 'react-tap-event-plugin'
 
