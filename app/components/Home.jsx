@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import anime from 'animejs';
+import {Link} from 'react-router'
 
 /*---------------DUMB PRESENTATIONAL COMPONENT-----------------*/
 
@@ -8,7 +9,9 @@ const DumbHome = () => (
     <div>
         <section>
             <h1 className='red'>HOT <span id="notRed">SEAT</span></h1>
-            <div className="chair"><img src="cropped-chair.png" height="150" width="150"></img></div>
+            <Link to='/hotseat'>
+              <div className="chair"><img src="cropped-chair.png" height="150" width="150"></img></div>
+            </Link>
         </section>
     </div>
 )

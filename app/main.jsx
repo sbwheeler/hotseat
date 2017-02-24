@@ -39,7 +39,7 @@ render (
   <Provider store={store}>
     <Router history={browserHistory}>
       <Route path="/" component={AppContainer} onEnter={onAppEnter}>
-        <IndexRedirect to="/hotseat" />
+        <IndexRedirect to="/home" />
         <Route path="/hotseat" component={Main} />
         <Route path="/home" component={Home} />
       </Route>
