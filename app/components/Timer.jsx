@@ -58,6 +58,7 @@ class Timer extends Component {
 		this.state = {
 			monologue: MONO_DEFUALT,
 			questions: QUESTIONS_DEFAULT,
+			paused: true,
 		};
 
 		this.mIntervalId = 0;
@@ -82,24 +83,29 @@ class Timer extends Component {
 	}
 
 	handleStart() {
-		if (!!this.props.timerStatus) {
-			clearInterval(this.mIntervalId)
-			clearInterval(this.qIntervalId)
+		if (!this.state.paused) {
+			// clearInterval(this.mIntervalId)
+			// clearInterval(this.qIntervalId)
+			this.setState({
+				paused: true
+			})
 		}
 		else {
-			console.log('inside handlestart without timer status')
+			this.setState({
+				paused: false
+			})
+			console.log('starting from paused state')
 			this.props.startTimer('monologue')
-			this.timer()
+			this.timer('monologue')
 
 		}
-
 	}
 
-	handleReset() {
-		clearInterval(this.mIntervalId)
-		clearInterval(this.qIntervalId)
-		this.props.resetTimer()
-	}
+	// handleReset() {
+	// 	clearInterval(this.mIntervalId)
+	// 	clearInterval(this.qIntervalId)
+	// 	this.props.resetTimer()
+	// }
 
 	displayMinSec(time) {
 		const min = Math.floor(time);
@@ -110,25 +116,31 @@ class Timer extends Component {
 		return `${min}:${sec}`;
 	}
 
-	timer() {
-		console.log('these are the props ', this.props)
-		console.log('the timerstatus', this.props.timerStatus)
+	timer(status) {
 
-		if (this.props.timerStatus === 'monologue') {
+		console.log('timer has been called with : ', status)
 
-			console.log('monologue timer')
+		status === 'monologue' ?
+		this.mIntervalId = setInterval(this.tick(status), 1000) :
+		this.qIntervalId = setInterval(this.tick(status), 1000)
 
-			this.mIntervalId = setInterval(
-			  this.setState({
-					monologue: this.state.monologue - 0.01
-				}), 1000)
+	}
+
+
+	tick(status){
+
+		console.log('ticking')
+
+		if (status === 'monologue'){
+			this.setState({
+				monologue: this.state.monologue - 0.01
+			})
+		} else if (status === 'questions') {
+		  this.setState({
+				questions: this.state.questions - 0.01
+			})
 		}
-		else if (this.props.timerStatus === 'questions') {
-			this.qIntervalId = setInterval(
-			  this.setState({
-					questions: this.state.questions - 0.01
-				}), 1000)
-		}
+
 	}
 
 	render() {

@@ -18,7 +18,7 @@ export const setTimerStatus = status => ({
 /*---------------REDUCER-----------------*/
 
 
-const reducer = (state = 'monologue', action) => {
+const reducer = (state = '', action) => {
 
   switch (action.type) {
 
