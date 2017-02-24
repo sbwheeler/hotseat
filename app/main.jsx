@@ -5,17 +5,20 @@ import {render} from 'react-dom'
 import {connect, Provider} from 'react-redux'
 
 import store from './store'
-import Jokes from './components/Jokes'
+
+import Timer from './components/Timer'
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import injectTapEventPlugin from 'react-tap-event-plugin'
+
+// needed for Material-UI
+injectTapEventPlugin();
 
 import {fetchUsers} from './reducers/users'
 
 const AppContainer = ({children}) => (
-  <div>
-    <nav>
-      <h3>Here is a navbar</h3>
-    </nav>
+  <MuiThemeProvider>
     { children }
-  </div>
+  </MuiThemeProvider>
 )
 
 const onAppEnter = () => {
@@ -31,8 +34,8 @@ render (
   <Provider store={store}>
     <Router history={browserHistory}>
       <Route path="/" component={AppContainer} onEnter={onAppEnter}>
-        <IndexRedirect to="/jokes" />
-        <Route path="/jokes" component={Jokes} />
+        <IndexRedirect to="/timer" />
+        <Route path="/timer" component={Timer} />
       </Route>
     </Router>
   </Provider>,
