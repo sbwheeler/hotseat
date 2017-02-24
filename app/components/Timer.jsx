@@ -3,6 +3,7 @@ import {RaisedButton, Slider} from 'material-ui'
 import { connect } from 'react-redux'
 import {setTimerStatus, reset} from '../reducers/timerStatus'
 import UserContainer from './users.jsx'
+// import CircularProgressbar from 'react-circular-progressbar';
 
 /*---------------INITIAL STATE CONSTANTS-----------------*/
 const MONO_DEFUALT = 2;
@@ -59,9 +60,17 @@ class Timer extends Component {
 			questions: QUESTIONS_DEFAULT,
 		};
 
+		this.mIntervalId = 0;
+		this.qIntervalId = 0;
+
 		this.handleMonologueChange = this.handleMonologueChange.bind(this);
 		this.handleQTimeChange = this.handleQTimeChange.bind(this);
 		this.handleStart = this.handleStart.bind(this);
+
+		this.timer = this.timer.bind(this);
+
+		console.log(this.props)
+
 	}
 
 	handleMonologueChange(event, monologue) {
@@ -73,9 +82,23 @@ class Timer extends Component {
 	}
 
 	handleStart() {
-		(!!this.props.timerStatus) ?
-			this.props.resetTimer() :
-			this.props.startTimer('monoglogue');
+		if (!!this.props.timerStatus) {
+			clearInterval(this.mIntervalId)
+			clearInterval(this.qIntervalId)
+		}
+		else {
+			console.log('inside handlestart without timer status')
+			this.props.startTimer('monologue')
+			this.timer()
+
+		}
+
+	}
+
+	handleReset() {
+		clearInterval(this.mIntervalId)
+		clearInterval(this.qIntervalId)
+		this.props.resetTimer()
 	}
 
 	displayMinSec(time) {
@@ -87,17 +110,49 @@ class Timer extends Component {
 		return `${min}:${sec}`;
 	}
 
+	timer() {
+		console.log('these are the props ', this.props)
+		console.log('the timerstatus', this.props.timerStatus)
+
+		if (this.props.timerStatus === 'monologue') {
+
+			console.log('monologue timer')
+
+			this.mIntervalId = setInterval(
+			  this.setState({
+					monologue: this.state.monologue - 0.01
+				}), 1000)
+		}
+		else if (this.props.timerStatus === 'questions') {
+			this.qIntervalId = setInterval(
+			  this.setState({
+					questions: this.state.questions - 0.01
+				}), 1000)
+		}
+	}
+
 	render() {
 		return (
-			<DumbTimer
-				handleQTimeChange={this.handleQTimeChange}
-				handleMonologueChange={this.handleMonologueChange}
-				handleStart={this.handleStart}
-				monologue={this.state.monologue}
-				questions={this.state.questions}
-				displayMinSec={this.displayMinSec}
-				timerStatus={this.props.timerStatus}
-			/>
+		  <div>
+				<DumbTimer
+					handleQTimeChange={this.handleQTimeChange}
+					handleMonologueChange={this.handleMonologueChange}
+					handleStart={this.handleStart}
+					monologue={this.state.monologue}
+					questions={this.state.questions}
+					displayMinSec={this.displayMinSec}
+					timerStatus={this.props.timerStatus}
+				/>
+				{/* this.props.timerStatus && <div>timer on!!!</div> */}
+				{/*<CircularProgressbar
+	          percentage={this.state.percentage}
+	          strokeWidth={4}
+	          textForPercentage={this.showTime}
+	        >
+         </CircularProgressbar>*/}
+
+        {console.log(this.state.monologue)}
+			</div>
 		)
 	}
 }
@@ -105,6 +160,7 @@ class Timer extends Component {
 /*---------------REDUX WRAPPER-----------------*/
 
 const mapState = ({ timerStatus }) => ({ timerStatus });
+
 const mapDispatch = dispatch => ({
 	startTimer: status => dispatch(setTimerStatus(status)),
 	resetTimer: () => dispatch(reset())
