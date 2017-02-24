@@ -24,7 +24,6 @@ const AppContainer = ({children}) => (
 const onAppEnter = () => {
   return firebase.database().ref('/seed_fellows/').once('value')
   .then(function(snapshot) {
-    console.log(snapshot.val());
     store.dispatch(fetchUsers(snapshot.val()))
   });
 }

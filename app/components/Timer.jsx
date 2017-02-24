@@ -2,10 +2,12 @@ import React, { Component } from 'react';
 import {RaisedButton, Slider} from 'material-ui'
 import { connect } from 'react-redux'
 import {setTimerStatus, reset} from '../reducers/timerStatus'
+import UserContainer from './users.jsx'
 
 /*---------------INITIAL STATE CONSTANTS-----------------*/
 const MONO_DEFUALT = 2;
 const QUESTIONS_DEFAULT = 6;
+
 
 /*---------------DUMB PRESENTATIONAL COMPONENT-----------------*/
 
@@ -42,6 +44,8 @@ const DumbTimer = ({ handleMonologueChange, handleQTimeChange, monologue, questi
 		</div>
 
 			<RaisedButton primary={true} onTouchTap={handleStart}>{(!!timerStatus) ? 'Pause' : 'Start!'}</RaisedButton>
+
+		<UserContainer />
 	</div>
 )
 
