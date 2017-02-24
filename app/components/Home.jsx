@@ -20,7 +20,7 @@ class Home extends Component {
   componentDidMount() {
     anime({
       targets: '.chair',
-      translateX: '13.5rem',
+      translateX: calc(50vw - 50%);
       scale: [.75, .9],
       delay: function(el, index) {
         return index * 80;
@@ -38,3 +38,6 @@ class Home extends Component {
 
 
 export default Home;
+
+
+// transform: translateX(calc(50vw - 50%)) scale(0.9);
