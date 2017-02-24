@@ -34,7 +34,8 @@ class UserComponent extends Component {
 function mapStateToProps(state) {
   return {
     users: state.users.users,
-    selectedPerson: state.users.selectedPerson
+    selectedPerson: state.users.selectedPerson,
+    timerStatus: state.timerStatus
   }
 }
 
