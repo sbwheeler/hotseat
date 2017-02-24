@@ -3,6 +3,7 @@ import {RaisedButton, Slider} from 'material-ui'
 import { connect } from 'react-redux'
 import {setTimerStatus, reset} from '../reducers/timerStatus'
 import UserContainer from './users.jsx'
+// import CircularProgressbar from 'react-circular-progressbar';
 
 /*---------------INITIAL STATE CONSTANTS-----------------*/
 const MONO_DEFUALT = 2;
@@ -12,7 +13,7 @@ const QUESTIONS_DEFAULT = 6;
 /*---------------DUMB PRESENTATIONAL COMPONENT-----------------*/
 
 
-const DumbTimer = ({ handleMonologueChange, handleQTimeChange, monologue, questions, displayMinSec, timerStatus, handleStart }) => (
+const DumbTimer = ({ handleMonologueChange, handleQTimeChange, monologue, questions, displayMinSec, timerStatus, handleStart, paused }) => (
 	<div className="clearfix">
 		<div className="col-12 mx-auto">
 			<h1 className="center">Welcome to Hotseat!</h1>
@@ -20,10 +21,10 @@ const DumbTimer = ({ handleMonologueChange, handleQTimeChange, monologue, questi
 				<h3>Monologue time</h3>
 				<h3>{displayMinSec(monologue)}</h3>
 				<Slider
-					disabled={!!timerStatus}
+					disabled={!paused}
 					style={{ width: '80%'}}
 					defaultValue={MONO_DEFUALT}
-					min={1}
+					min={0}
 					max={6}
 					onChange={handleMonologueChange}
 				/>
@@ -33,7 +34,7 @@ const DumbTimer = ({ handleMonologueChange, handleQTimeChange, monologue, questi
 				<h3>Questions time</h3>
 				<h3>{displayMinSec(questions)}</h3>
 				<Slider
-					disabled={!!timerStatus}
+					disabled={!paused}
 					style={{ width: '80%'}}
 					defaultValue={QUESTIONS_DEFAULT}
 					min={2}
@@ -43,7 +44,7 @@ const DumbTimer = ({ handleMonologueChange, handleQTimeChange, monologue, questi
 			</div>
 		</div>
 
-			<RaisedButton primary={true} onTouchTap={handleStart}>{(!!timerStatus) ? 'Pause' : 'Start!'}</RaisedButton>
+			<RaisedButton primary={true} onTouchTap={handleStart}>{(!paused) ? 'Pause' : 'Start!'}</RaisedButton>
 
 	</div>
 )
@@ -56,11 +57,17 @@ class Timer extends Component {
 		this.state = {
 			monologue: MONO_DEFUALT,
 			questions: QUESTIONS_DEFAULT,
+			paused: true,
 		};
+
+		this.mIntervalId = 0;
+		this.qIntervalId = 0;
 
 		this.handleMonologueChange = this.handleMonologueChange.bind(this);
 		this.handleQTimeChange = this.handleQTimeChange.bind(this);
 		this.handleStart = this.handleStart.bind(this);
+
+		this.timer = this.timer.bind(this);
 	}
 
 	handleMonologueChange(event, monologue) {
@@ -72,13 +79,32 @@ class Timer extends Component {
 	}
 
 	handleStart() {
-		(!!this.props.timerStatus) ?
-			this.props.resetTimer() :
-			this.props.startTimer('monoglogue');
+		if (!this.state.paused) {
+			clearInterval(this.mIntervalId)
+			clearInterval(this.qIntervalId)
+			this.setState({
+				paused: true
+			})
+		}
+		else {
+			this.setState({
+				paused: false
+			})
+			if(this.state.monologue > 0) this.props.startTimer('monologue')
+			else this.props.startTimer('questions')
+			setTimeout(() => this.timer(this.props.timerStatus), 200)
+		}
 	}
 
+	// handleReset() {
+	// 	clearInterval(this.mIntervalId)
+	// 	clearInterval(this.qIntervalId)
+	// 	this.props.resetTimer()
+	// }
+
 	displayMinSec(time) {
-		const min = Math.floor(time);
+		if (time < 0) return '0:00'
+ 		const min = Math.floor(time);
 		let sec = ((time - min) * 60).toString().split('.')[0];
 		while (sec.length < 2) {
 			sec = '0' + sec;
@@ -86,17 +112,56 @@ class Timer extends Component {
 		return `${min}:${sec}`;
 	}
 
+	timer(status) {
+		status === 'monologue' ?
+		this.mIntervalId = setInterval(() => this.tick(status), 1000) :
+		this.qIntervalId = setInterval(() => this.tick(status), 1000)
+
+	}
+
+
+	tick(status){
+		if (status === 'monologue'){
+			if(this.state.monologue > 0) {
+				this.setState({
+					monologue: this.state.monologue - (1 / 60)
+				})
+			}
+			else {
+				this.props.startTimer('questions');
+				this.setState({
+					questions: this.state.questions - (1 / 60)
+				})
+			}
+		} else if (status === 'questions') {
+		  this.setState({
+				questions: this.state.questions - (1 / 60)
+			})
+		}
+
+	}
+
 	render() {
 		return (
-			<DumbTimer
-				handleQTimeChange={this.handleQTimeChange}
-				handleMonologueChange={this.handleMonologueChange}
-				handleStart={this.handleStart}
-				monologue={this.state.monologue}
-				questions={this.state.questions}
-				displayMinSec={this.displayMinSec}
-				timerStatus={this.props.timerStatus}
-			/>
+		  <div>
+				<DumbTimer
+					handleQTimeChange={this.handleQTimeChange}
+					handleMonologueChange={this.handleMonologueChange}
+					handleStart={this.handleStart}
+					monologue={this.state.monologue}
+					questions={this.state.questions}
+					displayMinSec={this.displayMinSec}
+					timerStatus={this.props.timerStatus}
+					paused={this.state.paused}
+				/>
+				{/* this.props.timerStatus && <div>timer on!!!</div> */}
+				{/*<CircularProgressbar
+	          percentage={this.state.percentage}
+	          strokeWidth={4}
+	          textForPercentage={this.showTime}
+	        >
+         </CircularProgressbar>*/}
+			</div>
 		)
 	}
 }
@@ -104,6 +169,7 @@ class Timer extends Component {
 /*---------------REDUX WRAPPER-----------------*/
 
 const mapState = ({ timerStatus }) => ({ timerStatus });
+
 const mapDispatch = dispatch => ({
 	startTimer: status => dispatch(setTimerStatus(status)),
 	resetTimer: () => dispatch(reset())
