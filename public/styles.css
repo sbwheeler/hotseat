@@ -22,6 +22,5 @@ h1 {
 .chair {
   display: inline-block;
   margin: 0 auto;
-  transform: translateX(calc(50vw - 50%));
   border-radius: 50%;
 }
