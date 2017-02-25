@@ -20,9 +20,9 @@ class UserComponent extends Component {
 
   render() {
     return (
-    <div>
-      <RaisedButton onClick={() => this.pickRandomPerson()}>Pick a person!</RaisedButton>
-      <h1>{this.props.selectedPerson}</h1>
+    <div className="piece-container">
+      <RaisedButton secondary={true} fullWidth={true} onClick={() => this.pickRandomPerson()}>Pick a person!</RaisedButton>
+      <h2 className="center p1">{this.props.selectedPerson}</h2>
     </div>
     )
 
@@ -34,7 +34,8 @@ class UserComponent extends Component {
 function mapStateToProps(state) {
   return {
     users: state.users.users,
-    selectedPerson: state.users.selectedPerson
+    selectedPerson: state.users.selectedPerson,
+    timerStatus: state.timerStatus
   }
 }
 

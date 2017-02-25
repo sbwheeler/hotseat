@@ -15,7 +15,7 @@ const QUESTIONS_DEFAULT = 6;
 
 const DumbTimer = ({ handleMonologueChange, handleQTimeChange, monologue, questions, displayMinSec, timerStatus, handleStart, paused }) => (
 	<div className="clearfix">
-		<div className="col-12 mx-auto">
+		<div className="col-12 mx-auto px2">
 			<h1 className="center">Welcome to Hotseat!</h1>
 			<div className="col-6 inline-block">
 				<h3>Monologue time</h3>
@@ -43,8 +43,11 @@ const DumbTimer = ({ handleMonologueChange, handleQTimeChange, monologue, questi
 				/>
 			</div>
 		</div>
+		<div className="col-12 mx-auto piece-container">
+			<RaisedButton fullWidth={true} primary={true} onTouchTap={handleStart}>{(!paused) ? 'Pause' : 'Start!'}</RaisedButton>
+		</div>
 
-			<RaisedButton primary={true} onTouchTap={handleStart}>{(!paused) ? 'Pause' : 'Start!'}</RaisedButton>
+
 
 	</div>
 )
@@ -90,17 +93,20 @@ class Timer extends Component {
 			this.setState({
 				paused: false
 			})
-			if(this.state.monologue > 0) this.props.startTimer('monologue')
-			else this.props.startTimer('questions')
+			if (this.state.monologue > 0) this.props.startTimer('monologue')
+			else {
+				this.props.startTimer('questions')
+
+			}
 			setTimeout(() => this.timer(this.props.timerStatus), 200)
 		}
 	}
 
-	// handleReset() {
-	// 	clearInterval(this.mIntervalId)
-	// 	clearInterval(this.qIntervalId)
-	// 	this.props.resetTimer()
-	// }
+	handleReset() {
+		clearInterval(this.mIntervalId)
+		clearInterval(this.qIntervalId)
+		this.props.resetTimer()
+	}
 
 	displayMinSec(time) {
 		if (time < 0) return '0:00'
@@ -116,11 +122,13 @@ class Timer extends Component {
 		status === 'monologue' ?
 		this.mIntervalId = setInterval(() => this.tick(status), 1000) :
 		this.qIntervalId = setInterval(() => this.tick(status), 1000)
-
 	}
 
-
 	tick(status){
+		if (!this.state.questions) {
+			this.handleReset()
+		}
+
 		if (status === 'monologue'){
 			if(this.state.monologue > 0) {
 				this.setState({
@@ -129,6 +137,10 @@ class Timer extends Component {
 			}
 			else {
 				this.props.startTimer('questions');
+
+				console.log('firebase call on ', this.props.selectedPerson)
+				firebase.database().ref(`seed_fellows/${this.props.selectedPerson}`).set(true)
+
 				this.setState({
 					questions: this.state.questions - (1 / 60)
 				})
@@ -154,13 +166,6 @@ class Timer extends Component {
 					timerStatus={this.props.timerStatus}
 					paused={this.state.paused}
 				/>
-				{/* this.props.timerStatus && <div>timer on!!!</div> */}
-				{/*<CircularProgressbar
-	          percentage={this.state.percentage}
-	          strokeWidth={4}
-	          textForPercentage={this.showTime}
-	        >
-         </CircularProgressbar>*/}
 			</div>
 		)
 	}
@@ -168,7 +173,12 @@ class Timer extends Component {
 
 /*---------------REDUX WRAPPER-----------------*/
 
-const mapState = ({ timerStatus }) => ({ timerStatus });
+const mapState = (state) => {
+	return {
+		timerStatus: state.timerStatus,
+		selectedPerson: state.users.selectedPerson,
+	}
+};
 
 const mapDispatch = dispatch => ({
 	startTimer: status => dispatch(setTimerStatus(status)),

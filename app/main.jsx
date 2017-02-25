@@ -14,10 +14,11 @@ import injectTapEventPlugin from 'react-tap-event-plugin'
 // needed for Material-UI
 injectTapEventPlugin();
 
+import muiTheme from './utils';
 import {fetchUsers} from './reducers/users'
 
 const AppContainer = ({children}) => (
-  <MuiThemeProvider>
+  <MuiThemeProvider muiTheme={muiTheme}>
     { children }
   </MuiThemeProvider>
 )
