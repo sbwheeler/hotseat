@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import {RaisedButton} from 'material-ui';
 import {connect} from 'react-redux';
+import axios from 'axios'
 import {fetchQuestions} from '../reducers/questions'
 
 
@@ -33,10 +34,8 @@ class Questions extends Component {
 
 	componentDidMount() {
 		const { getAllQuestions } = this.props;
-		firebase.database().ref('/questions/').once('value')
-		.then(snapshot => {
-			getAllQuestions(snapshot.val())
-		})
+		axios('/api/questions')
+		.then((questions) => getAllQuestions(questions))
 		.catch(console.error)
 	}
 

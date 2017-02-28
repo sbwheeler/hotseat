@@ -24,9 +24,6 @@ class Home extends Component {
     anime({
       targets: '.chair',
       translateX: 500,
-// =======
-//       translateX: '13.4rem',
-// >>>>>>> b7015b57d0cf1d5eb4d85033a033636a6b563749
       scale: [.75, .9],
       delay: function(el, index) {
         return index * 80;
@@ -45,5 +42,3 @@ class Home extends Component {
 
 export default Home;
 
-
-// transform: translateX(calc(50vw - 50%)) scale(0.9);
