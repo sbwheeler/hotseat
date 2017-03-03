@@ -42,6 +42,8 @@
     "material-ui": "^0.17.0",
     "nodemon": "^1.11.0",
     "pretty-error": "^2.0.2",
+    "pg": "^6.1.0",
+    "pg-native": "^1.10.0",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
     "react-redux": "^4.4.5",
@@ -50,6 +52,7 @@
     "redux": "^3.6.0",
     "redux-logger": "^2.7.0",
     "redux-thunk": "^2.1.0",
+    "sequelize": "^3.30.2",
     "sinon": "^1.17.6",
     "sinon-chai": "^2.8.0"
   },
