@@ -18,6 +18,7 @@ export const setToken = token => ({
   type: USER_TOKEN, token 
 })
 
+// posts to route which will try and get token from learndot - dispatches whoami which can use token to get user's info on learndot  
 export const login = (email, password) =>
   dispatch =>
     axios.post('/api/auth/login/learndot',
@@ -31,12 +32,10 @@ export const login = (email, password) =>
 export const logout = () =>
   dispatch =>
     axios.post('/api/auth/logout')
-      .then(() => {
-        console.log('LOGOUT AJAX')
-        dispatch(whoami())
-      })
+      .then(() => dispatch(whoami()))
       .catch(() => dispatch(whoami()))
 
+// gets users info from learndot and puts it on state 
 export const whoami = () =>
   dispatch =>
     axios.get('/api/learndot/users/me')
