@@ -137,8 +137,6 @@ class Timer extends Component {
 			}
 			else {
 				this.props.startTimer('questions');
-
-				console.log('firebase call on ', this.props.selectedPerson)
 				firebase.database().ref(`seed_fellows/${this.props.selectedPerson}`).set(true)
 
 				this.setState({
