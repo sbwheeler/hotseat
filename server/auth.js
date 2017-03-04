@@ -17,7 +17,6 @@ auth.post('/login/learndot', (req, res, next) => {
 })
 
 auth.get('/whoami', (req, res) => {
-  console.log('did i log out?:::', req.session)
   res.send(req.user)
 })
 

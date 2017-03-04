@@ -14,7 +14,6 @@ module.exports = require('express').Router()
             }
         })
         .then(({data}) => {
-            console.log('my session:::::::=>=>', req.session)
             res.send(data)
         })
         .catch(next)

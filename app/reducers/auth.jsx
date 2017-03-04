@@ -24,7 +24,6 @@ export const login = (email, password) =>
     axios.post('/api/auth/login/learndot',
       {email, password})
       .then((response) => {
-        console.log('RES', response)
         dispatch(whoami())
       })
       .catch(() => dispatch(whoami()))     
